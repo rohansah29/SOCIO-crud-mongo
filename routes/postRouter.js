@@ -16,17 +16,21 @@ postRouter.post("/add",auth,async(req,res)=>{
 
 postRouter.get("/",auth,async(req,res)=>{
     try {
-        // const userDevice=req.query.device;
-        // const query={device: userDevice}
-        // if(query){
-        //     const post=PostModel.find({query})
-        //     res.send(post)
-        // }else{
-        //     console.log(req.body.userID)
-        const post= await PostModel.find({userID:req.body.userID})
-        console.log(post)
+        const userDevice=req.query.device;
+        let post;
+        if(userDevice){
+            post= await PostModel.find({device: userDevice})
+            res.json({post:post})
+        }else{
+        const userID=req.body.userID
+        if(!userID){
+          res.send({"error":"error"})
+        }else{
+          post= await PostModel.find({userID:userID})
+          console.log(post)
         res.json({post:post})
-        // }
+        }
+        }
     } catch (error) {
         res.send({"error":error})
     }
